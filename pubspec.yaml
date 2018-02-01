@@ -4,4 +4,4 @@ version: 0.1.0
 author: Roman Vanesyan <romain.vanesyan@gmail.com>
 homepage: https://github.com/vanesyan/logger
 environment:
-  sdk: '>=1.24.0'
+  sdk: '>=1.24.0 <2.0.0'

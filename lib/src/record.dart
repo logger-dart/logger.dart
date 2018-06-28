@@ -1,16 +1,14 @@
-import 'package:logger/handlers.dart' show Handler;
-import 'level.dart';
-import 'logger.dart' show Context, Logger;
+part of logger;
 
 /// [Record] represents a single log entry.
 ///
-/// Whenever [Context.log] or it's descendant methods (i.e. [Context.info],
-/// [Context.warning] etc.) called a new [Record] will be created and delegated
-/// to the logging [Handler]'s if the record's [level] is equal or higher
-/// than the [Logger]'s.
+/// Whenever [Interface.log] or it's derived methods (i.e. [Interface.info],
+/// [Interface.warning] etc.) are called a  record will be created and
+/// delegated to the appropriated logging handlers if the record's
+/// [level] is equal or higher than the [Logger]'s log entry is emitted on.
 abstract class Record {
-  /// Fields been attached to record by specific [Context].
-  Map<String, dynamic> get fields;
+  /// Name of the [Logger] record is fired by.
+  String get name;
 
   /// Severity level.
   Level get level;
@@ -18,12 +16,23 @@ abstract class Record {
   /// Log message.
   String get message;
 
+  /// Fields been attached to record by specific logging context.
+  Map<String, dynamic> get fields;
+
   /// Time when the record was created.
   DateTime get time;
+
+  /// Zone of calling code.
+  Zone get zone;
+
+  /// Returns JSON object representing the record.
+  Map<String, dynamic> toJson();
 }
 
 /// An internal implementation of [Record].
-class RecordImpl implements Record {
+class _Record implements Record {
+  @override
+  final String name;
   @override
   final Level level;
   @override
@@ -32,6 +41,17 @@ class RecordImpl implements Record {
   final Map<String, dynamic> fields;
   @override
   final DateTime time;
+  @override
+  final Zone zone;
 
-  RecordImpl(this.level, this.message, this.fields) : time = new DateTime.now();
+  _Record(this.name, this.level, this.message, this.fields, this.zone)
+      : time = DateTime.now();
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'name': name,
+        'level': level.toString(),
+        'message': message,
+        'time': time.toString(),
+        'fields': fields
+      };
 }

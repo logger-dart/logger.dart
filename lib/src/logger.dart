@@ -74,5 +74,10 @@ class Logger implements Interface {
   @override
   Tracer trace(String message) => _context.trace(message);
 
-  Context bind(Map<String, dynamic> fields) => new _Context(this, fields);
+  /// Creates a  logging context bind to [fields] set.
+  Interface withFields(Map<String, dynamic> fields) => _Context(this, fields);
+
+  /// Creates a  logging context bind to [key] and corresponding [value].
+  Interface withField(String key, dynamic value) =>
+      withFields(<String, dynamic>{key: value});
 }

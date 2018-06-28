@@ -1,22 +1,27 @@
-import 'logger.dart';
+part of logger;
 
-/// [Tracer] used to track time between [Context.trace] and [Tracer.stop]
-/// calls respectively.
+/// [Tracer] used to track time between [Interface.trace] and [Tracer.stop]
+/// calls.
 class Tracer {
-  Logger _logger;
-  final DateTime _start;
-  final String _message;
-  final Map<String, dynamic> _fields;
+  final Logger _logger;
+  final Map<String, dynamic> _baseFields;
+  final Stopwatch _stopwatch = Stopwatch()..start();
 
-  Tracer(this._logger, this._message, Map<String, dynamic> fields)
-      : _fields = new Map<String, dynamic>.from(fields),
-        _start = new DateTime.now();
+  Tracer(this._logger, this._baseFields);
 
-  /// Stops tracing with firing off the completion message.
-  void stop() {
-    final duration = new DateTime.now().difference(_start);
-    _fields['duration'] = duration;
+  /// Stops tracing with firing off the completion [message].
+  ///
+  /// Further calls are ignored.
+  void stop(String message) {
+    if (!_stopwatch.isRunning) {
+      return;
+    }
 
-    return _logger.bind(_fields).info(_message);
+    _stopwatch.stop();
+
+    final fields = Map<String, dynamic>.from(_baseFields);
+    fields['duration'] = _stopwatch.elapsed;
+
+    _logger.withFields(fields).info(message);
   }
 }

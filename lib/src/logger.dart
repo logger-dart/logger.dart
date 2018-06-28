@@ -1,72 +1,66 @@
-import 'dart:async';
-import 'package:logger/handlers.dart' show Handler;
-import 'level.dart';
-import 'record.dart';
-import 'tracer.dart';
+part of logger;
 
-/// Context provides single logging context.
-abstract class Context {
-  void log(Level level, String message);
-  void debug(String message);
-  void info(String message);
-  void warning(String message);
-  void error(String message);
-  void fatal(String message);
-  Tracer trace(String message);
-}
+/// Logger represents a logger used to log structural records.
+class Logger implements Interface {
+  static final Map<String, Logger> _loggers = <String, Logger>{};
 
-class _Context implements Context {
-  final Logger _logger;
-  final Map<String, dynamic> _fields;
-
-  _Context(this._logger, [Map<String, dynamic> fields])
-      : _fields = new Map<String, dynamic>.from(fields ?? <String, dynamic>{});
-
-  @override
-  void log(Level level, String message) => _logger._flush(this, level, message);
-  @override
-  void debug(String message) => log(Level.debug, message);
-  @override
-  void info(String message) => log(Level.info, message);
-  @override
-  void warning(String message) => log(Level.warning, message);
-  @override
-  void error(String message) => log(Level.error, message);
-  @override
-  void fatal(String message) => log(Level.fatal, message);
-  @override
-  Tracer trace(String message) => new Tracer(this._logger, message, _fields);
-
-  Record _finalize(Level level, String message) =>
-      new RecordImpl(level, message, _fields);
-}
-
-class Logger implements Context {
-  final StreamController<Record> _controller =
-      new StreamController<Record>.broadcast(sync: true);
+  final StreamController<Record> _controller;
   _Context _context;
 
+  /// Name of the logger.
   final String name;
+
+  /// Logging severity level used to filter records fired on the logger.
   Level level;
 
-  Logger({this.name = "", this.level = Level.info}) {
-    _context = new _Context(this);
+  /// Creates a new [Logger] instance with specified [name].
+  ///
+  /// If logging of records are not necessary to be emitted in a strict
+  /// order of calls consider set [async] to `true`.
+  Logger(this.name, {this.level = Level.info, bool async = false})
+      : _controller = StreamController<Record>.broadcast(sync: !async) {
+    _context = _Context(this, <String, dynamic>{});
+  }
+
+  /// Checks if logger with specified [name] has been already created,
+  /// if it has been created returns the instance, otherwise creates a
+  /// new [Logger] and put to the internal storage, so the instance
+  /// will available the next time [createLogger] will be invoked
+  /// with the same [name].
+  ///
+  /// If Logger hasn't been created before than optional [level] and [async]
+  /// will be used to create a new instance, otherwise they are ignored.
+  static Logger createLogger(String name, {Level level, bool async}) {
+    if (_loggers.containsKey(name)) {
+      return _loggers[name];
+    }
+
+    final logger = Logger(name, level: level, async: async);
+    _loggers[name] = logger;
+
+    return logger;
   }
 
   Stream<Record> get _onRecord => _controller.stream;
 
-  void addHandler(Handler h) => _onRecord.listen(h);
+  /// Adds [Record] handler to the logger by make it listen to the
+  /// record stream.
+  ///
+  /// [handler] must implement [LogHandler] class.
+  void addHandler(LogHandler handler) => _onRecord.listen(handler.handleLog);
 
-  void _flush(_Context context, Level level, String message) {
-    if (this.level > level) {
-      return;
+  Future<dynamic> close() => _controller.close();
+
+  void _flush(Record record) {
+    if (_controller != null) {
+      _controller.add(record);
     }
-
-    _controller.add(context._finalize(level, message));
   }
 
   @override
-  void log(Level level, String message) => _context.log(level, message);
+  void log(Level level, String message, [Zone zone]) =>
+      _context.log(level, message, zone);
+
   @override
   void debug(String message) => _context.debug(message);
   @override

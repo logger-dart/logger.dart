@@ -7,19 +7,4 @@ export 'src/package.dart'
         LogHandler,
         Interface,
         Logger,
-        Level,
-
-        // default logger related things
-        defaultLogger,
-        level,
-        addHandler,
-        close,
-        log,
-        debug,
-        info,
-        warning,
-        error,
-        fatal,
-        trace,
-        withFields,
-        withField;
+        Level;

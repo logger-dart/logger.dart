@@ -1,4 +1,7 @@
-part of logger;
+library logger.default_logger;
+
+import 'dart:async' show Zone;
+import 'package:logger/logger.dart';
 
 /// Singleton logger, default package logger, loges everything by default.
 ///

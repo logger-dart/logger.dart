@@ -15,27 +15,31 @@ class Logger implements Interface {
 
   /// Creates a new [Logger] instance with specified [name].
   ///
-  /// If logging of records are not necessary to be emitted in a strict
-  /// order of calls consider set [async] to `true`.
-  Logger(this.name, {this.level = Level.info, bool async = false})
-      : _controller = StreamController<Record>.broadcast(sync: !async) {
+  /// If logging of records are not necessary to be emitted in a strict order
+  /// of calls consider set [sync] to `false`.
+  ///
+  /// Prefer to use [Logger.createLogger] instead of this constructor
+  /// as it's caching logger once it's created.
+  Logger(this.name, {this.level = Level.info, bool sync = true})
+      : _controller = StreamController<Record>.broadcast(sync: !sync) {
     _context = _Context(this, <String, dynamic>{});
   }
 
   /// Checks if logger with specified [name] has been already created,
   /// if it has been created returns the instance, otherwise creates a
   /// new [Logger] and put to the internal storage, so the instance
-  /// will available the next time [createLogger] will be invoked
+  /// will available the next time [Logger.createLogger] will be invoked
   /// with the same [name].
   ///
-  /// If Logger hasn't been created before than optional [level] and [async]
+  /// If Logger hasn't been created before than optional [level] and [sync]
   /// will be used to create a new instance, otherwise they are ignored.
-  static Logger createLogger(String name, {Level level, bool async}) {
+  factory Logger.createLogger(String name,
+      {Level level = Level.info, bool sync = true}) {
     if (_loggers.containsKey(name)) {
       return _loggers[name];
     }
 
-    final logger = Logger(name, level: level, async: async);
+    final logger = Logger(name, level: level, sync: sync);
     _loggers[name] = logger;
 
     return logger;

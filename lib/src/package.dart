@@ -9,4 +9,3 @@ part 'record.dart';
 part 'interface.dart';
 part 'logger.dart';
 part 'context.dart';
-part 'default_logger.dart';

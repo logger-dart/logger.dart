@@ -21,7 +21,7 @@ class Logger implements Interface {
   /// Prefer to use [Logger.createLogger] instead of this constructor
   /// as it's caching logger once it's created.
   Logger(this.name, {this.level = Level.info, bool sync = true})
-      : _controller = StreamController<Record>.broadcast(sync: !sync) {
+      : _controller = StreamController<Record>.broadcast(sync: sync) {
     _context = _Context(this, <String, dynamic>{});
   }
 
@@ -51,7 +51,7 @@ class Logger implements Interface {
   /// record stream.
   ///
   /// [handler] must implement [LogHandler] class.
-  void addHandler(LogHandler handler) => _onRecord.listen(handler.handleLog);
+  void addHandler(LogHandler handler) => _onRecord.listen(handler);
 
   Future<dynamic> close() => _controller.close();
 
@@ -78,10 +78,10 @@ class Logger implements Interface {
   @override
   Tracer trace(String message) => _context.trace(message);
 
-  /// Creates a  logging context bind to [fields] set.
+  /// Creates a new logging context bind to [fields] set.
   Interface withFields(Map<String, dynamic> fields) => _Context(this, fields);
 
-  /// Creates a  logging context bind to [key] and corresponding [value].
+  /// Creates a new logging context bind to [key] and corresponding [value].
   Interface withField(String key, dynamic value) =>
       withFields(<String, dynamic>{key: value});
 }

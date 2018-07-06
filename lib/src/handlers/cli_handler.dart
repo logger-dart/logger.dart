@@ -1,11 +1,19 @@
 import 'package:logger/logger.dart' show Record, LogHandler;
 import 'package:logger/formatters.dart' show Formatter, TextFormatter;
 
-class CliHandler implements LogHandler {
-  final Formatter formatter;
+// Tests compliance with LogHandler.
+final LogHandler _ = CliHandler();
 
-  CliHandler({this.formatter = const TextFormatter()});
+class CliHandler {
+  Formatter _formatter;
 
-  @override
-  void handleLog(Record record) => print(formatter.format(record));
+  CliHandler({Formatter formatter}) {
+    if (formatter == null) {
+      _formatter = TextFormatter();
+    } else {
+      _formatter = formatter;
+    }
+  }
+
+  void call(Record record) => print(_formatter(record));
 }

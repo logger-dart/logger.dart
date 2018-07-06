@@ -1,5 +1,4 @@
-import 'package:logger/logger.dart' show Record;
+import 'package:logger/logger.dart' show Record, LogHandler;
 
-abstract class Formatter {
-  dynamic format(Record record);
-}
+/// Formatter is used to format incoming records in [LogHandler].
+typedef Formatter = dynamic Function(Record record);

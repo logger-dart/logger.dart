@@ -1,14 +1,16 @@
-import 'dart:collection';
+import 'dart:collection' show SplayTreeMap;
 import 'package:logger/logger.dart' show Level, Record;
 import 'formatter.dart';
 
-class TextFormatter implements Formatter {
+// Tests compliance with `Formatter` type.
+final Formatter _ = TextFormatter();
+
+class TextFormatter {
   final bool isColored;
 
-  const TextFormatter({this.isColored = true});
+  TextFormatter({this.isColored = true});
 
-  @override
-  String format(Record record) {
+  String call(Record record) {
     final buf = StringBuffer();
 
     _formatName(buf, record.name);
@@ -31,7 +33,7 @@ class TextFormatter implements Formatter {
     // Splay map is used here to alphabetically order fields;
     // complexity: O(nlogn).
     SplayTreeMap<String, dynamic>.from(fields)
-        .forEach((k, dynamic v) => buf..write(' $k=$v'));
+        .forEach((k, dynamic v) => buf.write(' $k=$v'));
   }
 
   String _finalize(StringBuffer buf) {

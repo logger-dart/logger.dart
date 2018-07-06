@@ -1,7 +1,7 @@
 name: logger
-description: A simple structured logger
-version: 0.1.0
+description: A simple, yet efficient structured logger for Dart.
+version: 0.2.0
 author: Roman Vanesyan <romain.vanesyan@gmail.com>
-homepage: https://github.com/vanesyan/logger
+homepage: https://github.com/vanesyan/logger.dart
 environment:
-  sdk: '>=1.24.0 <2.0.0'
+  sdk: '>2.0.0-dev <=3.0.0'

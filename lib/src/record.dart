@@ -27,6 +27,8 @@ abstract class Record {
   /// Time when the record was created.
   DateTime get time;
 
+  /// PID of current process.
+  int get pid;
   /// Zone of calling code.
   Zone get zone;
 }
@@ -43,6 +45,8 @@ class _Record implements Record {
   final Map<String, dynamic> fields;
   @override
   final DateTime time;
+  @override
+  final int pid;
   @override
   final Zone zone;
 

@@ -43,6 +43,9 @@ abstract class Logger implements Interface {
   void addHandler(Handler handler);
   /// Returns a future that completes when logger is closed.
   Future<void> get done;
+  /// Binds returns a new [ContextBuilder] to create field set that is bound
+  /// to the logging records emitted by the logging context.
+  ContextBuilder<Interface> bind();
       : _controller = StreamController<Record>.broadcast(sync: true),
     if (_loggers.containsKey(name)) {
       return _loggers[name];

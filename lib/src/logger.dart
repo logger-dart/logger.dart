@@ -8,9 +8,9 @@ import "level.dart";
 import "record.dart" show Record;
 import "tracer.dart" show Tracer;
 
-  final StreamController<Record> _controller;
-  _Context _context;
-
+/// Logger represents a logger used to log structural records.
+abstract class Logger implements Interface {
+  /// Creates a new [Logger] instance.
   /// Name of the logger.
   final String name;
 
@@ -19,13 +19,12 @@ import "tracer.dart" show Tracer;
 
   /// Creates a new [Logger] instance with specified [name].
   ///
-  /// If logging of records are not necessary to be emitted in a strict order
-  /// of calls consider set [sync] to `false`.
+  /// Optional [name] may be provided, which will be delegated along
+  /// all records emitted by this instance.
   ///
   /// Prefer to use [Logger.createLogger] instead of this constructor
   /// as it's caching logger once it's created.
   Logger(this.name, {this.level = Level.info, bool sync = true})
-      : _controller = StreamController<Record>.broadcast(sync: sync) {
     _context = _Context(this, <String, dynamic>{});
   }
 
@@ -35,15 +34,16 @@ import "tracer.dart" show Tracer;
   /// will available the next time [Logger.createLogger] will be invoked
   /// with the same [name].
   ///
-  /// If Logger hasn't been created before than optional [level] and [sync]
+  /// If Logger hasn't been created before, then optional [level]
   /// will be used to create a new instance, otherwise they are ignored.
   factory Logger.createLogger(String name,
-      {Level level = Level.info, bool sync = true}) {
+
   /// Adds [Record] handler to the logger by make it listen to the
   /// record stream.
   ///
   /// [handler] must implement [Handler] class.
   void addHandler(Handler handler);
+      : _controller = StreamController<Record>.broadcast(sync: true),
     if (_loggers.containsKey(name)) {
       return _loggers[name];
     }

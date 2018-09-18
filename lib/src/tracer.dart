@@ -5,16 +5,21 @@ import "logger.dart" show LoggerImpl;
 
 /// [Tracer] used to track time between [Interface.trace] and [Tracer.stop]
 /// calls.
-class Tracer {
-  final Logger _logger;
-  final Map<String, dynamic> _baseFields;
-  final Stopwatch _stopwatch = Stopwatch()..start();
+abstract class Tracer {
+  /// Stops tracing with firing off the completion [message], all further calls
+  /// are ignored.
+  void stop(String message);
+}
 
-  Tracer(this._logger, this._baseFields);
+class TracerImpl implements Tracer {
+  final LoggerImpl _logger;
+  final List<Field<Object>> _baseFields;
+  final Stopwatch _stopwatch;
 
-  /// Stops tracing with firing off the completion [message].
-  ///
-  /// Further calls are ignored.
+  TracerImpl(this._logger, this._baseFields)
+      : _stopwatch = Stopwatch()..start();
+
+  @override
   void stop(String message) {
     if (!_stopwatch.isRunning) {
       return;
@@ -22,9 +27,9 @@ class Tracer {
 
     _stopwatch.stop();
 
-    final fields = Map<String, dynamic>.from(_baseFields);
-    fields['duration'] = _stopwatch.elapsed;
-
-    _logger.withFields(fields).info(message);
+    (ContextBuilderImpl(_logger, _baseFields)
+          ..duration("duration", _stopwatch.elapsed))
+        .build()
+        .info(message);
   }
 }

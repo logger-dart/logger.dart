@@ -1,7 +1,4 @@
-import 'package:logger/logger.dart' show Record, LogHandler;
-
-// Tests compliance with [LogHandler].
-final LogHandler _ = const MemoryHandler();
+import "package:logger/logger.dart" show Record, Handler;
 
 /// [MemoryHandler] implements in-memory logging handler.
 ///
@@ -9,14 +6,15 @@ final LogHandler _ = const MemoryHandler();
 /// is created it's simply appended to the records list.
 ///
 /// The main scenario of [MemoryHandler] use is testing.
-class MemoryHandler {
+class MemoryHandler extends Handler {
   /// Logged records.
-  final List<Record> _records = const <Record>[];
+  final List<Record> _records = <Record>[];
 
-  const MemoryHandler();
+  MemoryHandler();
 
   /// A list of records fired by the logger on this handler.
   List<Record> get records => List<Record>.unmodifiable(_records);
 
+  @override
   void call(Record record) => _records.add(record);
 }

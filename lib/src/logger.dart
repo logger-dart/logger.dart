@@ -41,6 +41,8 @@ abstract class Logger implements Interface {
   ///
   /// [handler] must implement [Handler] class.
   void addHandler(Handler handler);
+  /// Returns a future that completes when logger is closed.
+  Future<void> get done;
       : _controller = StreamController<Record>.broadcast(sync: true),
     if (_loggers.containsKey(name)) {
       return _loggers[name];
@@ -59,6 +61,7 @@ abstract class Logger implements Interface {
   ///
   /// [handler] must implement [LogHandler] class.
   void addHandler(LogHandler handler) => _onRecord.listen(handler);
+      _completer.complete();
 
   Future<dynamic> close() => _controller.close();
 
@@ -66,6 +69,8 @@ abstract class Logger implements Interface {
     if (_controller != null) {
       _controller.add(record);
     }
+  @override
+  Future<void> get done => _completer.future;
   @override
   void addHandler(Handler handler) {
     handler.subscription = _onRecord?.listen(handler, onDone: handler.close);

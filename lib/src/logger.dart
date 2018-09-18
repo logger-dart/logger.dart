@@ -39,6 +39,11 @@ import "tracer.dart" show Tracer;
   /// will be used to create a new instance, otherwise they are ignored.
   factory Logger.createLogger(String name,
       {Level level = Level.info, bool sync = true}) {
+  /// Adds [Record] handler to the logger by make it listen to the
+  /// record stream.
+  ///
+  /// [handler] must implement [Handler] class.
+  void addHandler(Handler handler);
     if (_loggers.containsKey(name)) {
       return _loggers[name];
     }
@@ -63,6 +68,9 @@ import "tracer.dart" show Tracer;
     if (_controller != null) {
       _controller.add(record);
     }
+  @override
+  void addHandler(Handler handler) {
+    handler.subscription = _onRecord?.listen(handler, onDone: handler.close);
   }
 
   @override

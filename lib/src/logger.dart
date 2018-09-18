@@ -25,7 +25,6 @@ abstract class Logger implements Interface {
   /// Prefer to use [Logger.createLogger] instead of this constructor
   /// as it's caching logger once it's created.
   Logger(this.name, {this.level = Level.info, bool sync = true})
-    _context = _Context(this, <String, dynamic>{});
   }
 
   /// Checks if logger with specified [name] has been already created,
@@ -90,10 +89,6 @@ abstract class Logger implements Interface {
   @override
   Tracer trace(String message) => _context.trace(message);
 
-  /// Creates a new logging context bind to [fields] set.
-  Interface withFields(Map<String, dynamic> fields) => _Context(this, fields);
-
-  /// Creates a new logging context bind to [key] and corresponding [value].
-  Interface withField(String key, dynamic value) =>
-      withFields(<String, dynamic>{key: value});
+  @override
+  ContextBuilder<Interface> bind() => ContextBuilderImpl(this);
 }

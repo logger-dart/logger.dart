@@ -6,7 +6,7 @@ import "record.dart" show Record;
 import "tracer.dart";
 
 /// Interface represents an API shared by both [Logger] and
-/// field bind context (created by calling [Logger.withFields], etc.).
+/// field set bound context (build by calling [Logger.bind], etc.).
 abstract class Interface {
   /// Puts a [Record] for a [message] with particular severity [level].
   void log(Level level, String message, [Zone zone]);

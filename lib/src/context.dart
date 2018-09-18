@@ -10,11 +10,10 @@ import "tracer.dart";
 
 class _Context implements Interface {
   final Logger _logger;
-  final Map<String, dynamic> _fields;
+  List<Field<Object>> _fields;
 
-  _Context(this._logger,
-      [Map<String, dynamic> fields = const <String, dynamic>{}])
-      : _fields = Map<String, dynamic>.unmodifiable(fields);
+  Context(this._logger, [List<Field<Object>> fields])
+      : _fields = List.unmodifiable(fields);
 
   @override
   void log(Level level, String message, [Zone zone]) {
@@ -40,10 +39,9 @@ class _Context implements Interface {
 
   @override
   Tracer trace(String message) {
-    final fields = Map<String, dynamic>.from(_fields);
-    fields['start'] = DateTime.now();
-
-    _logger.withFields(fields).info(message);
+    ContextBuilderImpl(_logger, _fields)
+      ..date("start", DateTime.now())
+      ..build().info(message);
 
     return Tracer(_logger, _fields);
   }

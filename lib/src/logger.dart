@@ -22,20 +22,19 @@ abstract class Logger implements Interface {
   /// Optional [name] may be provided, which will be delegated along
   /// all records emitted by this instance.
   ///
-  /// Prefer to use [Logger.createLogger] instead of this constructor
+  /// Prefer to use [Logger.getLogger] instead of this constructor
   /// as it's caching logger once it's created.
-  Logger(this.name, {this.level = Level.info, bool sync = true})
-  }
+  factory Logger({String name, Level level}) = LoggerImpl;
 
   /// Checks if logger with specified [name] has been already created,
   /// if it has been created returns the instance, otherwise creates a
   /// new [Logger] and put to the internal storage, so the instance
-  /// will available the next time [Logger.createLogger] will be invoked
+  /// will available the next time [Logger.getLogger] will be invoked
   /// with the same [name].
   ///
   /// If Logger hasn't been created before, then optional [level]
   /// will be used to create a new instance, otherwise they are ignored.
-  factory Logger.createLogger(String name,
+  factory Logger.getLogger(String name, {Level level}) = LoggerImpl.getLogger;
 
   /// Adds [Record] handler to the logger by make it listen to the
   /// record stream.

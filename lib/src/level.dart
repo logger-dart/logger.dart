@@ -15,6 +15,7 @@ import "logger.dart";
 /// it aligns in range between [Level.all] ([value] = 0x0) and
 /// [Level.off] ([value] = 0xffff).
 class Level implements Comparable<Level> {
+  /// Name of the level.
   final String name;
 
   /// Unique value used to identify the level.
@@ -23,38 +24,42 @@ class Level implements Comparable<Level> {
   const Level(this.name, this.value);
 
   /// Logging level to turn on logging of all levels.
-  static const Level all = const Level('-', 0x0);
+  static const Level all = Level("-", 0x0);
 
   /// Logging level for debugging messages.
-  static const Level debug = const Level('debug', 0x1);
+  static const Level debug = Level("debug", 0x1);
 
   /// Logging level for informative messages.
-  static const Level info = const Level('info', 0x2);
+  static const Level info = Level("info", 0x2);
 
   /// Logging level for potential errors.
-  static const Level warning = const Level('warning', 0x3);
+  static const Level warning = Level("warning", 0x3);
 
   /// Logging level for errors.
-  static const Level error = const Level('error', 0x4);
+  static const Level error = Level("error", 0x4);
 
   /// Logging level for fatal errors, leads to process exit.
-  static const Level fatal = const Level('fatal', 0x5);
+  static const Level fatal = Level("fatal", 0x5);
 
   /// Logging level to completely turn off logging.
-  static const Level off = const Level('-', 0xffff);
+  static const Level off = Level("-", 0xffff);
 
   @override
   int get hashCode => value;
 
   @override
-  int compareTo(Level o) => value - o.value;
+  bool operator ==(Object other) => other is Level && value == other.value;
+
+  bool operator >=(Level other) => value >= other.value;
+
+  bool operator >(Level other) => value > other.value;
+
+  bool operator <=(Level other) => value <= other.value;
+
+  bool operator <(Level other) => value < other.value;
 
   @override
-  bool operator ==(dynamic o) => o is Level && o.value == value;
-  bool operator >=(Level o) => value >= o.value;
-  bool operator >(Level o) => value > o.value;
-  bool operator <=(Level o) => value <= o.value;
-  bool operator <(Level o) => value < o.value;
+  int compareTo(Level other) => value - other.value;
 
   @override
   String toString() => name;

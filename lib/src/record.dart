@@ -29,9 +29,6 @@ abstract class Record {
 
   /// Zone of calling code.
   Zone get zone;
-
-  /// Returns JSON object representing the record.
-  Map<String, dynamic> toJson();
 }
 
 /// An internal implementation of [Record].
@@ -51,12 +48,4 @@ class _Record implements Record {
 
   _Record(this.name, this.level, this.message, this.fields, this.zone)
       : time = DateTime.now();
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'name': name,
-        'level': level.toString(),
-        'message': message,
-        'time': time.toString(),
-        'fields': fields
-      };
 }

@@ -1,4 +1,9 @@
-part of logger;
+import "dart:async" show Zone;
+
+import "fields/fields.dart";
+import "interface.dart";
+import "level.dart";
+import "logger.dart";
 
 /// [Record] represents a single log entry.
 ///

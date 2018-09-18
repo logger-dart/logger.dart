@@ -1,4 +1,12 @@
-part of logger;
+import "dart:async" show Zone;
+import "dart:io" show exit, pid;
+import "context_builder.dart" show ContextBuilderImpl;
+import "fields/fields.dart" show Field;
+import "interface.dart";
+import "level.dart";
+import "logger.dart" show LoggerImpl;
+import "record.dart" show RecordImpl;
+import "tracer.dart";
 
 class _Context implements Interface {
   final Logger _logger;

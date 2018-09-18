@@ -1,4 +1,7 @@
-part of logger;
+import "context_builder.dart" show ContextBuilderImpl;
+import "fields/fields.dart" show Field;
+import "interface.dart";
+import "logger.dart" show LoggerImpl;
 
 /// [Tracer] used to track time between [Interface.trace] and [Tracer.stop]
 /// calls.

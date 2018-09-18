@@ -1,8 +1,12 @@
-part of logger;
+import "dart:async" show Completer, Future, StreamController, Stream, Zone;
 
-/// Logger represents a logger used to log structural records.
-class Logger implements Interface {
-  static final Map<String, Logger> _loggers = <String, Logger>{};
+import "context.dart";
+import "context_builder.dart" show ContextBuilder, ContextBuilderImpl;
+import "handler.dart";
+import "interface.dart";
+import "level.dart";
+import "record.dart" show Record;
+import "tracer.dart" show Tracer;
 
   final StreamController<Record> _controller;
   _Context _context;

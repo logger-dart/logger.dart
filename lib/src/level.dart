@@ -1,4 +1,4 @@
-part of logger;
+import "logger.dart";
 
 /// [Level] controls logging output of [Logger].
 ///

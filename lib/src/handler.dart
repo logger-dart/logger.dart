@@ -1,4 +1,4 @@
-part of logger;
+import "dart:async" show Future, StreamSubscription;
 
-/// LogHandler is used to handle log records.
-typedef LogHandler = void Function(Record record);
+import "logger.dart" show Logger;
+import "record.dart" show Record;

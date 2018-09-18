@@ -1,4 +1,9 @@
-part of logger;
+import "dart:async" show Zone;
+
+import "level.dart";
+import "logger.dart" show Logger;
+import "record.dart" show Record;
+import "tracer.dart";
 
 /// Interface represents an API shared by both [Logger] and
 /// field bind context (created by calling [Logger.withFields], etc.).

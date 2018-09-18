@@ -22,7 +22,7 @@ abstract class Record {
   String get message;
 
   /// Fields been attached to record by specific logging context.
-  Map<String, dynamic> get fields;
+  List<Field<Object>> get fields;
 
   /// Time when the record was created.
   DateTime get time;
@@ -42,7 +42,7 @@ class _Record implements Record {
   @override
   final String message;
   @override
-  final Map<String, dynamic> fields;
+  final List<Field<Object>> fields;
   @override
   final DateTime time;
   @override

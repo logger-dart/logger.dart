@@ -8,8 +8,8 @@ import "logger.dart" show LoggerImpl;
 import "record.dart" show RecordImpl;
 import "tracer.dart";
 
-class _Context implements Interface {
-  final Logger _logger;
+class Context implements Interface {
+  final LoggerImpl _logger;
   List<Field<Object>> _fields;
 
   Context(this._logger, [List<Field<Object>> fields])
@@ -23,17 +23,27 @@ class _Context implements Interface {
 
     zone ??= Zone.current;
 
-    _logger._flush(_Record(_logger.name, level, message, _fields, zone));
+    _logger.write(RecordImpl(
+        name: _logger?.name,
+        level: level,
+        message: message,
+        fields: _fields,
+        pid: pid,
+        zone: zone));
   }
 
   @override
   void debug(String message) => log(Level.debug, message);
+
   @override
   void info(String message) => log(Level.info, message);
+
   @override
   void warning(String message) => log(Level.warning, message);
+
   @override
   void error(String message) => log(Level.error, message);
+
   @override
   void fatal(String message, {bool die = true}) {
     log(Level.fatal, message);
@@ -42,12 +52,13 @@ class _Context implements Interface {
       exit(1);
     }
   }
+
   @override
   Tracer trace(String message) {
     ContextBuilderImpl(_logger, _fields)
       ..date("start", DateTime.now())
       ..build().info(message);
 
-    return Tracer(_logger, _fields);
+    return TracerImpl(_logger, _fields);
   }
 }

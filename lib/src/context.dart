@@ -35,8 +35,13 @@ class _Context implements Interface {
   @override
   void error(String message) => log(Level.error, message);
   @override
-  void fatal(String message) => log(Level.fatal, message);
+  void fatal(String message, {bool die = true}) {
+    log(Level.fatal, message);
 
+    if (die) {
+      exit(1);
+    }
+  }
   @override
   Tracer trace(String message) {
     ContextBuilderImpl(_logger, _fields)

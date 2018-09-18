@@ -85,7 +85,8 @@ abstract class Logger implements Interface {
   @override
   void error(String message) => _context.error(message);
   @override
-  void fatal(String message) => _context.fatal(message);
+  void fatal(String message, {bool die = true}) =>
+      _context.fatal(message, die: die);
   @override
   Tracer trace(String message) => _context.trace(message);
 

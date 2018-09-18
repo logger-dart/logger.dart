@@ -24,7 +24,10 @@ abstract class Interface {
   void error(String message);
 
   /// Logs [message] with [Level.fatal] severity.
-  void fatal(String message);
+  ///
+  /// If [die] argument is set to `true` the program is exited
+  /// after log message is emitted.
+  void fatal(String message, {bool die = true});
 
   /// Trace returns a  [Tracer] emitting record when [Tracer.stop]
   /// is called with corresponding duration time between [Interface.trace]

@@ -6,7 +6,7 @@ dart:
 
 dart_task:
   - test: --platform vm
-  - dartanalyzer: true
+  # - dartanalyzer: true
 
 branches:
   only:

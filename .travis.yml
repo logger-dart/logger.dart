@@ -1,0 +1,17 @@
+sudo: false
+language: dart
+dart:
+  - dev
+  - stable
+
+dart_task:
+  - test: --platform vm
+  - dartanalyzer: true
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - $HOME/.pub-cache

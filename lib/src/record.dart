@@ -1,6 +1,6 @@
 import "dart:async" show Zone;
 
-import "fields/fields.dart";
+import "field.dart" show Field;
 import "interface.dart";
 import "level.dart";
 import "logger.dart";
@@ -34,26 +34,4 @@ abstract class Record {
 
   /// Zone of calling code.
   Zone get zone;
-}
-
-/// An internal implementation of [Record].
-class RecordImpl implements Record {
-  @override
-  final String name;
-  @override
-  final Level level;
-  @override
-  final String message;
-  @override
-  final List<Field<Object>> fields;
-  @override
-  final DateTime time;
-  @override
-  final int pid;
-  @override
-  final Zone zone;
-
-  RecordImpl(
-      {this.name, this.level, this.message, this.fields, this.pid, this.zone})
-      : time = DateTime.now();
 }

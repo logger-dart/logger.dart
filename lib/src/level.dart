@@ -13,7 +13,7 @@ import "logger.dart";
 /// While we recommend to use levels available auto of the box, user-defined
 /// levels are also supported. When define [Level] make sure
 /// it aligns in range between [Level.all] ([value] = 0x0) and
-/// [Level.off] ([value] = 0xffff).
+/// [Level.off] ([value] = 0xfffff).
 class Level implements Comparable<Level> {
   /// Name of the level.
   final String name;
@@ -30,25 +30,26 @@ class Level implements Comparable<Level> {
   static const Level debug = Level("debug", 0x1);
 
   /// Logging level for informative messages.
-  static const Level info = Level("info", 0x2);
+  static const Level info = Level("info", 0xf);
 
   /// Logging level for potential errors.
-  static const Level warning = Level("warning", 0x3);
+  static const Level warning = Level("warning", 0xff);
 
   /// Logging level for errors.
-  static const Level error = Level("error", 0x4);
+  static const Level error = Level("error", 0xfff);
 
   /// Logging level for fatal errors, leads to process exit.
-  static const Level fatal = Level("fatal", 0x5);
+  static const Level fatal = Level("fatal", 0xffff);
 
   /// Logging level to completely turn off logging.
-  static const Level off = Level("-", 0xffff);
+  static const Level off = Level("-", 0xfffff);
 
   @override
   int get hashCode => value;
 
   @override
-  bool operator ==(Object other) => other is Level && value == other.value;
+  bool operator ==(Object other) =>
+      other is Level && value == (other as Level).value;
 
   bool operator >=(Level other) => value >= other.value;
 

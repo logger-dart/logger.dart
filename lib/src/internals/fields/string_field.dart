@@ -1,4 +1,4 @@
-import "field.dart";
+import "package:logger/logger.dart" show Field, FieldKind;
 
 class StringField extends Field<String> {
   @override

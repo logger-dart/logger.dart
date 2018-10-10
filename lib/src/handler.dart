@@ -10,8 +10,8 @@ abstract class Handler {
   /// Subscription to the logging stream of a [Logger] the handler currently
   /// is bounded to.
   ///
-  /// Must be never reassigned directly outside. Probably is used only while
-  /// call of [Handler.close] to cancel subscription.
+  /// Must be never reassigned directly outside. Should only be used while
+  /// call of [Handler.close] to cancel subscription to the stream.
   StreamSubscription<Record> subscription;
 
   /// Handles incoming [Record]s.
@@ -27,7 +27,7 @@ abstract class Handler {
   /// It is unnecessary to call this method on handlers individually after
   /// logger close, as it's performed automatically by [Logger.close].
   Future<void> close() =>
-      subscription.cancel().then<void>((_) {
+      subscription.cancel().then<void>((dynamic _) {
         subscription = null;
       });
 }

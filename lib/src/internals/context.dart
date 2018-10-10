@@ -1,11 +1,11 @@
 import "dart:async" show Zone;
 import "dart:io" show exit, pid;
+
+import "package:logger/logger.dart" show Field, Interface, Level, Tracer;
+
 import "context_builder.dart" show ContextBuilderImpl;
-import "fields/fields.dart" show Field;
-import "interface.dart";
-import "level.dart";
-import "logger.dart" show LoggerImpl;
-import "record.dart" show RecordImpl;
+import "logger.dart";
+import "record.dart";
 import "tracer.dart";
 
 class Context implements Interface {
@@ -13,10 +13,15 @@ class Context implements Interface {
   List<Field<Object>> _fields;
 
   Context(this._logger, [List<Field<Object>> fields])
-      : _fields = List.unmodifiable(fields);
+      : _fields = fields != null ? List.unmodifiable(fields) : null;
 
   @override
   void log(Level level, String message, [Zone zone]) {
+    if (level == Level.all || level == Level.off) {
+      throw ArgumentError.value(level.name, "level",
+          "Level must not be set to either Level.all or Level.off");
+    }
+
     if (_logger.level > level) {
       return;
     }
@@ -24,7 +29,7 @@ class Context implements Interface {
     zone ??= Zone.current;
 
     _logger.write(RecordImpl(
-        name: _logger?.name,
+        name: _logger.name,
         level: level,
         message: message,
         fields: _fields,

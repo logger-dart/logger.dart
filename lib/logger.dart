@@ -1,9 +1,11 @@
-export "src/context_builder.dart" show ContextBuilder;
-export "src/fields/fields.dart" show Field, FieldKind;
+library logger;
+
+export "src/context_builder.dart";
+export "src/field.dart";
 export "src/handler.dart";
 export "src/interface.dart";
 export "src/level.dart";
 export "src/loggable.dart";
-export "src/logger.dart" show Logger;
-export "src/record.dart" show Record;
-export "src/tracer.dart" show Tracer;
+export "src/logger.dart";
+export "src/record.dart";
+export "src/tracer.dart";

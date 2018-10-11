@@ -10,18 +10,13 @@ import "tracer.dart";
 
 class Context implements Interface {
   final LoggerImpl _logger;
-  List<Field<Object>> _fields;
+  final List<Field<Object>> _fields;
 
   Context(this._logger, [List<Field<Object>> fields])
       : _fields = fields != null ? List.unmodifiable(fields) : null;
 
   @override
   void log(Level level, String message, [Zone zone]) {
-    if (level == Level.all || level == Level.off) {
-      throw ArgumentError.value(level.name, "level",
-          "Level must not be set to either Level.all or Level.off");
-    }
-
     if (_logger.level > level) {
       return;
     }

@@ -59,7 +59,7 @@ class ContextBuilderImpl extends BaseContextBuilderImpl<Interface> {
   }
 
   @override
-  Interface build() => Context(_logger, _fields);
+  Interface build() => Context(_logger, _fields.isNotEmpty ? _fields : null);
 }
 
 class PartContextBuilderImpl

@@ -1,4 +1,4 @@
-import "dart:async" show Future;
+import "dart:async" show Future, runZoned, Zone;
 
 import "package:test/test.dart";
 import "package:logger/logger.dart" show Logger, Level, Record;
@@ -6,6 +6,37 @@ import "package:logger/handlers.dart" show MemoryHandler;
 
 void main() {
   group("Logger", () {
+    test("Logger#close returns a future", () {
+      final logger = Logger();
+      final result = logger.close();
+
+      expect(result is Future, isTrue);
+    });
+
+    test("Logger#close throws error on double call", () async {
+      final logger = Logger();
+
+      expect(logger.close, returnsNormally);
+      expect(logger.close, throws);
+    });
+
+    test("Logger#close returns the same future as Logger#done", () {
+      final logger = Logger();
+      final result = logger.close();
+
+      expect(result, same(logger.done));
+    }, skip: true);
+
+    test("isn't closed until Logger#close is called", () async {
+      final logger = Logger();
+
+      expect(logger.isClosed, isFalse);
+
+      await logger.close();
+
+      expect(logger.isClosed, isTrue);
+    });
+
     test("Logger.getLogger returns the same logger for same name", () {
       final logger1 = Logger.getLogger("logger1");
       final logger2 = Logger.getLogger("logger1");
@@ -13,6 +44,9 @@ void main() {
 
       expect(logger1, same(logger2));
       expect(logger1, isNot(same(logger3)));
+
+      logger1.close();
+      logger3.close();
     });
 
     test("logger instantiated with Logger factory is not recoverable", () {
@@ -38,6 +72,21 @@ void main() {
 
       logger3.close();
       logger4.close();
+    });
+
+    test("Logger#close removes logger from loggers storage", () async {
+      final logger1 = Logger.getLogger("logger");
+      final logger2 = Logger.getLogger("logger");
+
+      expect(logger1, same(logger2));
+
+      await logger1.close();
+
+      expect(logger2, same(logger1));
+
+      final logger3 = Logger.getLogger("logger");
+
+      expect(logger1, isNot(same(logger3)));
     });
 
     test("logger defaults", () {
@@ -93,8 +142,8 @@ void main() {
       logger.warning("3");
       logger.error("4");
 
-      expect(handler1.records.length, equals(4));
-      expect(handler2.records.length, equals(2));
+      expect(handler1.records, hasLength(4));
+      expect(handler2.records, hasLength(2));
     });
 
     test("Logger#log fires records in calls order", () {
@@ -121,18 +170,6 @@ void main() {
       expect(records[4].message, equals("5"));
     });
 
-    test(
-        "Logger#log throws if either Level.all or Level.off is provided as level",
-        () {
-      final logger = Logger();
-      final handler = MemoryHandler();
-
-      logger.addHandler(handler);
-
-      expect(() => logger.log(Level.all, "1"), throwsArgumentError);
-      expect(() => logger.log(Level.off, "5"), throwsArgumentError);
-    });
-
     test("Logger#log emits log records with custom severity", () {
       final logger = Logger();
       final handler = MemoryHandler();
@@ -145,7 +182,7 @@ void main() {
 
       logger.log(customLevel, "1");
 
-      expect(handler.records.length, equals(1));
+      expect(handler.records, hasLength(1));
       expect(handler.records[0].level, equals(customLevel));
       expect(handler.records[0].message, equals("1"));
     });
@@ -166,7 +203,7 @@ void main() {
 
       records = handler.records;
 
-      expect(records.length, equals(4));
+      expect(records, hasLength(4));
 
       const unloggableLevel = Level("unloggable", 0x1);
       const loggableLevel = Level("loggable", 0xf);
@@ -177,7 +214,7 @@ void main() {
 
       records = handler.records;
 
-      expect(records.length, equals(5));
+      expect(records, hasLength(5));
       expect(records[4].level, equals(loggableLevel));
     });
 
@@ -199,7 +236,7 @@ void main() {
 
       final records = handler.records;
 
-      expect(records.length, equals(5));
+      expect(records, hasLength(5));
       expect(records[0].level, equals(Level.debug));
       expect(records[1].level, equals(Level.info));
       expect(records[2].level, equals(Level.warning));
@@ -207,28 +244,125 @@ void main() {
       expect(records[4].level, equals(Level.fatal));
     });
 
-    test("Logger#close returns a future", () {
-      final logger = Logger();
-      final result = logger.close();
+    group("Logger#log properly set zone", () {
+      test("Top-level zone", () {
+        final logger = Logger();
+        final handler = MemoryHandler();
 
-      expect(result is Future, isTrue);
+        logger
+          ..level = Level.all
+          ..addHandler(handler);
+
+        logger.info("Info");
+
+        expect(handler.records, hasLength(1));
+        expect(Zone.current, same(handler.records[0].zone));
+      });
+
+      test("Child zone", () {
+        final logger = Logger();
+        final handler = MemoryHandler();
+
+        logger
+          ..level = Level.all
+          ..addHandler(handler);
+
+        Zone zone;
+
+        runZoned(() {
+          zone = Zone.current;
+          logger.info("Info");
+        });
+
+        expect(handler.records, hasLength(1));
+        expect(zone, same(handler.records[0].zone));
+      });
+
+      test("Passed zone", () {
+        final logger = Logger();
+        final handler = MemoryHandler();
+
+        logger
+          ..level = Level.all
+          ..addHandler(handler);
+
+        Zone zone;
+
+        runZoned(() {
+          zone = Zone.current;
+        });
+
+        runZoned(() => logger.log(Level.info, "Info", zone));
+
+        expect(handler.records, hasLength(1));
+        expect(zone, same(handler.records[0].zone));
+      });
     });
 
-    test("Logger#close returns the same future as Logger#done", () {
+    test("Logger#bind build correct field set", () {
       final logger = Logger();
-      final result = logger.close();
+      final handler = MemoryHandler();
 
-      expect(result, same(logger.done));
-    }, skip: true);
+      logger
+        ..level = Level.all
+        ..addHandler(handler);
 
-    test("isn't closed until Logger#close is called", () async {
+      final context = (logger.bind()
+            ..string("field1", "test")
+            ..number("field2", 3)
+            ..boolean("field3", true))
+          .build();
+
+      context.warning("Context warning");
+
+      expect(handler.records, hasLength(1));
+
+      final records = handler.records;
+      final record1 = records[0];
+
+      expect(record1.fields, isNotNull);
+      expect(record1.fields, hasLength(3));
+      expect(record1.fields.clear, throws);
+    });
+
+    test("Logger#bind can build empty field set", () {
       final logger = Logger();
+      final handler = MemoryHandler();
 
-      expect(logger.isClosed, isFalse);
+      logger
+        ..level = Level.all
+        ..addHandler(handler);
 
-      await logger.close();
+      final context = logger.bind().build();
 
-      expect(logger.isClosed, isTrue);
+      context.info("Context info");
+
+      expect(handler.records[0], isNotNull);
+      expect(handler.records[0].fields, isNull);
+    });
+
+    test("Logger#bind put the same field set for each record fired on it", () {
+      final logger = Logger();
+      final handler = MemoryHandler();
+
+      logger
+        ..level = Level.all
+        ..addHandler(handler);
+
+      final context = (logger.bind()
+            ..string("field1", "test")
+            ..number("field2", 3))
+          .build();
+
+      context
+        ..warning("Context warning")
+        ..info("Context info");
+
+      final records = handler.records;
+      final record1 = records[0];
+      final record2 = records[1];
+
+      expect(record1.fields, same(record2.fields));
     });
   });
 }

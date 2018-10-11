@@ -4,9 +4,14 @@ dart:
   - dev
   - stable
 
-dart_task:
-  - test: --platform vm
-  # - dartanalyzer: true
+install:
+  - gem install coveralls-lcov
+  - pub get --package-dirs
+  - pub global activate dart_coveralls
+
+script:
+  - pub run test
+  - pub global run dart_coveralls report --token $COVERALLS_TOKEN --retry 2 --exclute-test-files test/all.dart
 
 branches:
   only:

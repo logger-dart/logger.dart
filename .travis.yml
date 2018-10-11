@@ -6,7 +6,7 @@ dart:
 
 install:
   - gem install coveralls-lcov
-  - pub get --package-dirs
+  - pub get
   - pub global activate dart_coveralls
 
 script:

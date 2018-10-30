@@ -1,7 +1,7 @@
 import "dart:async" show Future, runZoned, Zone;
 
 import "package:test/test.dart";
-import "package:logger/logger.dart" show Logger, Level, Record;
+import "package:logger/logger.dart" show Logger, Level, Record, FieldKind;
 import "package:logger/handlers.dart" show MemoryHandler;
 
 void main() {
@@ -93,7 +93,7 @@ void main() {
       final logger = Logger();
 
       expect(logger.level, same(Level.info));
-      expect(logger.name == "", isTrue);
+      expect(logger.name, isNull);
     });
 
     test("Logger#level is set properly", () {
@@ -363,6 +363,32 @@ void main() {
       final record2 = records[1];
 
       expect(record1.fields, same(record2.fields));
+    });
+
+    test("Logger#trace measure execution time", () async {
+      final logger = Logger();
+      final handler = MemoryHandler();
+
+      logger
+        ..level = Level.all
+        ..addHandler(handler);
+
+      final tracer = logger.trace("Uploading");
+
+      await Future<void>.delayed(Duration(seconds: 1));
+
+      tracer.stop("Uploaded");
+
+      final records = handler.records;
+
+      expect(records, hasLength(2));
+      expect(records[0].message, equals("Uploading"));
+      expect(records[1].message, equals("Uploaded"));
+
+      final idx =
+          records[0].fields.indexWhere((f) => f.kind == FieldKind.dateTime);
+
+      expect(idx, isNot(equals(-1)));
     });
   });
 }

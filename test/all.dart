@@ -7,6 +7,5 @@ void main() {
   level_test.main();
   logger_test.main();
   json_formatter_test.main();
-
   discard_handler_test.main();
 }

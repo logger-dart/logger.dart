@@ -1,8 +1,6 @@
 ![Linux build][travis-badge-url] ![Code coverage][coveralls-badge-url] [![Docs reference][dartdocs-badge-url]](dartdocs-url)
 
-
 Logger is an efficient structured logger for Dart.
-
 
 ### Installation
 The process of installation is very common and only requires `pub` to be installed
@@ -56,8 +54,8 @@ import "package:logger/default_logger.dart" as log;
 import "package:logger/handlers.dart" show ConsoleHandler;
 
 void main() {
-  log..addHandler(ConsoleHandler());
-  
+  log.addHandler(ConsoleHandler());
+
   log.info("Hello world!");
 }
 ```

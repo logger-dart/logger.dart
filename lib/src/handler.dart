@@ -26,8 +26,7 @@ abstract class Handler {
   ///
   /// It is unnecessary to call this method on handlers individually after
   /// logger close, as it's performed automatically by [Logger.close].
-  Future<void> close() =>
-      subscription.cancel().then<void>((dynamic _) {
+  Future<void> close() => subscription.cancel().then<void>((dynamic _) {
         subscription = null;
       });
 }

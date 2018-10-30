@@ -17,7 +17,7 @@ class Context implements Interface {
 
   @override
   void log(Level level, String message, [Zone zone]) {
-    if (_logger.level > level) {
+    if (!_logger.isEnabledFor(level)) {
       return;
     }
 

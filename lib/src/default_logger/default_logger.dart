@@ -2,46 +2,39 @@ import "dart:async" show Zone;
 
 import "package:logger/logger.dart";
 
-/// Singleton logger, default package logger, logs everything by default.
-///
-/// Use it only for quick tasks as it's always a good idea to create
-/// a new [Logger] instance rather than use the default logger.
-final Logger logger = Logger(level: Level.all);
+final _logger = Logger();
 
-/// Set logging level for [logger].
-set level(Level level) => logger.level = level;
+/// Sets logging level for logger.
+set level(Level level) => _logger.level = level;
 
-/// Current logging level of [logger].
-Level get level => logger.level;
+/// Returns current logging level of logger.
+Level get level => _logger.level;
 
-/// Add handler to [logger].
-void addHandler(Handler h) => logger.addHandler(h);
+/// Adds handler to logger.
+void addHandler(Handler h) => _logger.addHandler(h);
 
-/// Close [logger] logging stream.
-void close() => logger.close();
-
-/// Log record with [level] and [message] on [logger].
+/// Logs record with [level] and [message] on logger.
 void log(Level level, String message, [Zone zone]) =>
-    logger.log(level, message, zone);
+    _logger.log(level, message, zone);
 
-/// Log debug record on [logger].
-void debug(String message) => logger.debug(message);
+/// Logs debug record on logger.
+void debug(String message) => _logger.debug(message);
 
-/// Log info record on [logger].
-void info(String message) => logger.info(message);
+/// Logs info record on logger.
+void info(String message) => _logger.info(message);
 
-/// Log warning record on [logger].
-void warning(String message) => logger.warning(message);
+/// Logs warning record on logger.
+void warning(String message) => _logger.warning(message);
 
-/// Log error record on [logger].
-void error(String message) => logger.error(message);
+/// Logs error record on logger.
+void error(String message) => _logger.error(message);
 
-/// Log fatal record on [logger].
+/// Logs fatal record on logger.
 void fatal(String message, {bool die = true}) =>
-    logger.fatal(message, die: die);
+    _logger.fatal(message, die: die);
 
-/// Log trace record on [logger].
-Tracer trace(String message) => logger.trace(message);
+/// Logs trace record on logger.
+Tracer trace(String message) => _logger.trace(message);
 
-/// Creates a new [ContextBuilder] to build a new logging context with [logger].
-ContextBuilder<Interface> bind() => logger.bind();
+/// Creates a new [ContextBuilder] to build a new logging context with logger.
+ContextBuilder<Interface> bind() => _logger.bind();

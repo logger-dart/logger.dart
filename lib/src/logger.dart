@@ -42,14 +42,18 @@ abstract class Logger implements Interface {
   /// invocation.
   bool get isClosed;
 
+  /// Returns a future that completes when logger is closed.
+  Future<void> get done;
+
   /// Adds [Record] handler to the logger by make it listen to the
   /// record stream.
   ///
   /// [handler] must implement [Handler] class.
   void addHandler(Handler handler);
 
-  /// Returns a future that completes when logger is closed.
-  Future<void> get done;
+  /// Checks if the message with provided severity [level] will be processed
+  /// by the logger.
+  bool isEnabledFor(Level level);
 
   /// Closes logger. All appended log handlers also are closed appropriately.
   /// Idle for flushes by i/o handlers may occur.

@@ -1,8 +1,13 @@
 name: logger
-description: A simple, yet efficient structured logger for Dart.
 version: 0.3.0
+description: >
+  An efficient structured logger for Dart
+
+  The library provides a strongly-typed APIs to log structural records
+  advantaging a better debugging experience.
+
 author: Roman Vanesyan <romain.vanesyan@gmail.com>
-homepage: https://github.com/vanesyan/logger.dart
+homepage: https://github.com/logger-dart/logger.dart
 environment:
   sdk: '>=2.0.0 <=3.0.0'
 

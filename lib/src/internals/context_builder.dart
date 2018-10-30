@@ -12,7 +12,7 @@ import "fields/object_field.dart";
 import "fields/string_field.dart";
 import "logger.dart";
 
-abstract class BaseContextBuilderImpl<T> implements ContextBuilder<T> {
+abstract class _BaseContextBuilder<T> implements ContextBuilder<T> {
   final List<Field<Object>> _fields = [];
 
   // ignore: avoid_positional_boolean_parameters
@@ -49,7 +49,7 @@ abstract class BaseContextBuilderImpl<T> implements ContextBuilder<T> {
   T build();
 }
 
-class ContextBuilderImpl extends BaseContextBuilderImpl<Interface> {
+class ContextBuilderImpl extends _BaseContextBuilder<Interface> {
   final LoggerImpl _logger;
 
   ContextBuilderImpl(this._logger, [List<Field<Object>> fields]) {
@@ -63,7 +63,7 @@ class ContextBuilderImpl extends BaseContextBuilderImpl<Interface> {
 }
 
 class PartContextBuilderImpl
-    extends BaseContextBuilderImpl<List<Field<Object>>> {
+    extends _BaseContextBuilder<List<Field<Object>>> {
   @override
   List<Field<Object>> build() => List.unmodifiable(_fields);
 }

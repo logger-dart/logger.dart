@@ -19,9 +19,8 @@ class LoggerImpl implements Logger {
   @override
   final String name;
 
-  LoggerImpl({String name})
-      : name = name ?? "",
-        _level = Level.info,
+  LoggerImpl({this.name})
+      : _level = Level.info,
         _completer = Completer(),
         _controller = StreamController<Record>.broadcast(sync: true),
         _isClosed = false {

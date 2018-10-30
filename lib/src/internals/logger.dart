@@ -90,7 +90,7 @@ class LoggerImpl implements Logger {
   Future<void> close() => _close();
 
   @override
-  bool isEnabledFor(Level other) => level >= other;
+  bool isEnabledFor(Level other) => level <= other;
 
   @override
   void log(Level level, String message, [Zone zone]) =>

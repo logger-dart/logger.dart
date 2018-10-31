@@ -1,7 +1,7 @@
 name: logger
-version: 0.3.0
+version: 0.3.1
 description: >
-  An efficient structured logger for Dart
+  An efficient structured logger for Dart.
 
   The library provides a strongly-typed APIs to log structural records
   advantaging a better debugging experience.

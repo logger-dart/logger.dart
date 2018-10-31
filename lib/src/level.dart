@@ -48,8 +48,7 @@ class Level implements Comparable<Level> {
   int get hashCode => value;
 
   @override
-  bool operator ==(Object other) =>
-      other is Level && value == other.value;
+  bool operator ==(Object other) => other is Level && value == other.value;
 
   bool operator >=(Level other) => value >= other.value;
 

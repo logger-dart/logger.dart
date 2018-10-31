@@ -1,7 +1,7 @@
 import "dart:async"
     show Stream, StreamController, StreamSubscription, StreamTransformerBase;
 
-import "package:logger/logger.dart" show Record, Handler;
+import "package:logger/logger.dart" show Record;
 
 /// Formatter is used to format log records and used by particular handler.
 abstract class Formatter extends StreamTransformerBase<Record, String> {

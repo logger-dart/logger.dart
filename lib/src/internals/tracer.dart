@@ -20,7 +20,7 @@ class TracerImpl implements Tracer {
     _stopwatch.stop();
 
     (ContextBuilderImpl(_logger, _baseFields)
-      ..duration("duration", _stopwatch.elapsed))
+          ..duration("duration", _stopwatch.elapsed))
         .build()
         .info(message);
   }

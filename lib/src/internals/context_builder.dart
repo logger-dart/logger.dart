@@ -62,8 +62,7 @@ class ContextBuilderImpl extends _BaseContextBuilder<Interface> {
   Interface build() => Context(_logger, _fields.isNotEmpty ? _fields : null);
 }
 
-class PartContextBuilderImpl
-    extends _BaseContextBuilder<List<Field<Object>>> {
+class PartContextBuilderImpl extends _BaseContextBuilder<List<Field<Object>>> {
   @override
   List<Field<Object>> build() => List.unmodifiable(_fields);
 }

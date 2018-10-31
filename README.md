@@ -1,4 +1,4 @@
-![Linux build][travis-badge-url] ![Code coverage][coveralls-badge-url] [![Docs reference][dartdocs-badge-url]](dartdocs-url)
+![Linux build][travis-badge-url] ![Code coverage][coveralls-badge-url] [![Docs reference][dartdocs-badge-url]][dartdocs-url]
 
 Logger is an efficient structured logger for Dart.
 
@@ -64,7 +64,7 @@ Logger provided by the `default_logger` package entry shares the same API as the
 `Logger` available from `logger` package entry, with exception that the former cannot
 be closed.
 
-You can find out more about API by following the [link](dartdocs-url).
+You can find out more about API by following the [link][dartdocs-url].
 
 ## License
 The source code is released under the terms of [MIT] license.

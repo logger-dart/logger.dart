@@ -50,13 +50,13 @@ abstract class _BaseContextBuilder<T> implements ContextBuilder<T> {
 }
 
 class ContextBuilderImpl extends _BaseContextBuilder<Interface> {
-  final LoggerImpl _logger;
-
   ContextBuilderImpl(this._logger, [List<Field<Object>> fields]) {
     if (fields != null) {
       _fields.addAll(fields);
     }
   }
+
+  final LoggerImpl _logger;
 
   @override
   Interface build() => Context(_logger, _fields.isNotEmpty ? _fields : null);

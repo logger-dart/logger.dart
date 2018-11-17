@@ -9,11 +9,11 @@ import "record.dart";
 import "tracer.dart";
 
 class Context implements Interface {
-  final LoggerImpl _logger;
-  final List<Field<Object>> _fields;
-
   Context(this._logger, [List<Field<Object>> fields])
       : _fields = fields != null ? List.unmodifiable(fields) : null;
+
+  final LoggerImpl _logger;
+  final List<Field<Object>> _fields;
 
   @override
   void log(Level level, String message, [Zone zone]) {

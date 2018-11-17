@@ -3,13 +3,13 @@ import "package:logger/logger.dart";
 import "package:test/test.dart";
 
 class _StringHandler extends Handler {
-  final Formatter formatter;
-  final List<String> records;
-
   _StringHandler(this.formatter)
       : records = [],
         super();
 
+  final Formatter formatter;
+  final List<String> records;
+  
   @override
   void call(Record record) => records.add(formatter(record));
 }

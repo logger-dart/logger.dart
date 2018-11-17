@@ -7,10 +7,10 @@ import "package:logger/logger.dart" show Record, Handler;
 ///
 /// The main scenario of [MemoryHandler] use is testing.
 class MemoryHandler extends Handler {
+  MemoryHandler();
+
   /// Logged records.
   final List<Record> _records = <Record>[];
-
-  MemoryHandler();
 
   /// A list of records fired by the logger on this handler.
   List<Record> get records => List<Record>.unmodifiable(_records);

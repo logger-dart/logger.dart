@@ -5,14 +5,14 @@ import "package:logger/logger.dart" show Record;
 
 /// Formatter is used to format log records and used by particular handler.
 abstract class Formatter extends StreamTransformerBase<Record, String> {
-  StreamController<String> _resultController;
-  Stream<Record> _recordStream;
-  StreamSubscription<Record> _recordSubscription;
-
   /// Initializes formatter internals.
   Formatter() {
     _resultController = StreamController(onListen: _listen, onCancel: _cancel);
   }
+
+  StreamController<String> _resultController;
+  Stream<Record> _recordStream;
+  StreamSubscription<Record> _recordSubscription;
 
   void _listen() {
     _recordSubscription = _recordStream.listen((record) {

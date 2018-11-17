@@ -1,8 +1,8 @@
 import "dart:async" show Future, runZoned, Zone;
 
-import "package:test/test.dart";
-import "package:logger/logger.dart" show Logger, Level, Record, FieldKind;
 import "package:logger/handlers.dart" show MemoryHandler;
+import "package:logger/logger.dart" show Logger, Level, Record, FieldKind;
+import "package:test/test.dart";
 
 void main() {
   group("Logger", () {
@@ -17,7 +17,7 @@ void main() {
       final logger = Logger();
 
       expect(logger.close, returnsNormally);
-      expect(logger.close, throws);
+      expect(logger.close, throwsA("Logger is already closed!"));
     });
 
     test("Logger#close returns the same future as Logger#done", () {
@@ -322,7 +322,7 @@ void main() {
 
       expect(record1.fields, isNotNull);
       expect(record1.fields, hasLength(3));
-      expect(record1.fields.clear, throws);
+      expect(record1.fields.clear, throwsUnsupportedError);
     });
 
     test("Logger#bind can build empty field set", () {

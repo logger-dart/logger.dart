@@ -5,11 +5,11 @@ import "package:logger/logger.dart" show Record, Field, FieldKind;
 import "formatter.dart" show Formatter;
 
 class JsonFormatter extends Formatter {
-  final JsonEncoder _encoder;
-
   JsonFormatter([String indent])
       : _encoder = JsonEncoder.withIndent(indent),
         super();
+
+  final JsonEncoder _encoder;
 
   Map<String, Object> _format(List<Field<Object>> fields) {
     if (fields == null) {

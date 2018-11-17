@@ -1,24 +1,14 @@
-import "dart:async" show Completer, Future, StreamController, Stream, Zone;
+import "dart:async" show Completer, StreamController, Zone;
 
 import "package:logger/logger.dart"
-    show ContextBuilder, Handler, Interface, Level, Tracer, Record;
+    show ContextBuilder, Handler, Interface, Level, Logger, Tracer, Record;
 
-import "../logger.dart";
 import "context.dart";
 import "context_builder.dart" show ContextBuilderImpl;
 
+final Map<String, LoggerImpl> _loggers = {};
+
 class LoggerImpl implements Logger {
-  static final Map<String, LoggerImpl> _loggers = {};
-
-  final Completer<void> _completer;
-  final StreamController<Record> _controller;
-  bool _isClosed;
-  Context _context;
-  Level _level;
-
-  @override
-  final String name;
-
   LoggerImpl({this.name})
       : _level = Level.info,
         _completer = Completer(),
@@ -37,6 +27,15 @@ class LoggerImpl implements Logger {
 
     return logger;
   }
+
+  final Completer<void> _completer;
+  final StreamController<Record> _controller;
+  bool _isClosed;
+  Context _context;
+  Level _level;
+
+  @override
+  final String name;
 
   Stream<Record> get _onRecord => _controller?.stream;
 
@@ -68,11 +67,13 @@ class LoggerImpl implements Logger {
 
   Future<void> _close() {
     if (isClosed) {
-      return Future.error("Logger is closed!");
+      return Future.error("Logger is already closed!");
     }
 
+    _cleanUp();
+
+    // ignore: avoid_annotating_with_dynamic
     return _controller.close().then<void>((dynamic _) {
-      _cleanUp();
       _completer.complete();
 
       return _completer.future;

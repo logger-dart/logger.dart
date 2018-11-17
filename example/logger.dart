@@ -1,5 +1,3 @@
-import "dart:async" show Future;
-
 import "package:logger/logger.dart" show Handler, Logger, Record;
 
 class PrintHandler extends Handler {
@@ -23,7 +21,7 @@ class PrintHandler extends Handler {
   }
 }
 
-void main() async {
+Future<int> main() async {
   final logger = Logger.getLogger("example.print_handler")
     ..addHandler(PrintHandler());
 
@@ -38,4 +36,6 @@ void main() async {
   await Future<void>.delayed(const Duration(milliseconds: 1000));
 
   tracer.stop("uploaded!");
+
+  return 0;
 }

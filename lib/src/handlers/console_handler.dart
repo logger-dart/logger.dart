@@ -13,10 +13,6 @@ const List<Level> _defaultStderrLevels = <Level>[
 
 /// ConsoleHandler is a log handler for outputting to console (stdout/stderr).
 class ConsoleHandler extends Handler {
-  final Formatter _formatter;
-  final Set<Level> _stderrLevels;
-  bool _silent;
-
   /// Creates a new [ConsoleHandler] instance with optional [formatter].
   ///
   /// Only [Record]s with [Level.warning], [Level.error] and [Level.fatal]
@@ -27,13 +23,17 @@ class ConsoleHandler extends Handler {
   /// To disable output of the handler set [silent] to `true`.
   ConsoleHandler(
       {@required Formatter formatter,
-      bool silent = false,
-      List<Level> stderrLevels = _defaultStderrLevels})
+        bool silent = false,
+        List<Level> stderrLevels = _defaultStderrLevels})
       : assert(silent != null),
         assert(formatter != null),
         _formatter = formatter,
         _silent = silent,
         _stderrLevels = Set<Level>.from(stderrLevels ?? <Level>[]);
+
+  final Formatter _formatter;
+  final Set<Level> _stderrLevels;
+  bool _silent;
 
   /// Returns if silent mode is on.
   bool get silent => _silent;

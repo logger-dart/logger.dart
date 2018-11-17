@@ -1,12 +1,11 @@
 import "dart:async" show Future;
 
-import "package:logger/src/context_builder.dart" show ContextBuilder;
-import "package:logger/src/handler.dart";
-import "package:logger/src/interface.dart";
-import "package:logger/src/level.dart";
-import "package:logger/src/record.dart" show Record;
-
+import "context_builder.dart" show ContextBuilder;
+import "handler.dart";
+import "interface.dart";
 import "internals/logger.dart" show LoggerImpl;
+import "level.dart";
+import "record.dart" show Record;
 
 /// Logger represents a logger used to log structural records.
 abstract class Logger implements Interface {

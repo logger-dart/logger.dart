@@ -15,13 +15,13 @@ import "logger.dart";
 /// it aligns in range between [Level.all] ([value] = 0x0) and
 /// [Level.off] ([value] = 0xfffff).
 class Level implements Comparable<Level> {
+  const Level(this.name, this.value);
+
   /// Name of the level.
   final String name;
 
   /// Unique value used to identify the level.
   final int value;
-
-  const Level(this.name, this.value);
 
   /// Logging level to turn on logging of all levels.
   static const Level all = Level("-", 0x0);

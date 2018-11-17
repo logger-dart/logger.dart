@@ -10,7 +10,7 @@ on the machine.
 $ pub get logger
 ```
 
-_Make sure you are running on Dart 2.0 or greater, as logger is currently limits
+_Make sure you are running on Dart 2.1 or greater, as logger is currently limits
 support only to this platform._
 
 ### Quick Start

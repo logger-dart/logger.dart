@@ -1,5 +1,5 @@
 name: logger
-version: 0.3.1
+version: 0.4.0
 description: >
   An efficient structured logger for Dart.
 
@@ -9,7 +9,7 @@ description: >
 author: Roman Vanesyan <romain.vanesyan@gmail.com>
 homepage: https://github.com/logger-dart/logger.dart
 environment:
-  sdk: '>=2.0.0 <=3.0.0'
+  sdk: '>=2.1.0 <=3.0.0'
 
 dependencies:
   meta: ^1.1.6

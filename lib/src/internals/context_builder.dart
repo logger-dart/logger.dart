@@ -46,7 +46,7 @@ abstract class _BaseContextBuilder<T> implements ContextBuilder<T> {
   void string(String key, String val) => _fields.add(StringField(key, val));
 
   @override
-  T build();
+  T finalize();
 }
 
 class ContextBuilderImpl extends _BaseContextBuilder<Interface> {
@@ -59,10 +59,10 @@ class ContextBuilderImpl extends _BaseContextBuilder<Interface> {
   final LoggerImpl _logger;
 
   @override
-  Interface build() => Context(_logger, _fields.isNotEmpty ? _fields : null);
+  Interface finalize() => Context(_logger, _fields.isNotEmpty ? _fields : null);
 }
 
 class PartContextBuilderImpl extends _BaseContextBuilder<List<Field<Object>>> {
   @override
-  List<Field<Object>> build() => List.unmodifiable(_fields);
+  List<Field<Object>> finalize() => List.unmodifiable(_fields);
 }

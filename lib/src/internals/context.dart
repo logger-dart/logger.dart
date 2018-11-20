@@ -55,9 +55,10 @@ class Context implements Interface {
 
   @override
   Tracer trace(String message) {
-    ContextBuilderImpl(_logger, _fields)
-      ..date("start", DateTime.now())
-      ..build().info(message);
+    (ContextBuilderImpl(_logger, _fields)
+      ..date("start", DateTime.now()))
+        .finalize()
+        .info(message);
 
     return TracerImpl(_logger, _fields);
   }

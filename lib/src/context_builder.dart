@@ -13,5 +13,6 @@ abstract class ContextBuilder<T> {
   void number(String key, num val);
   void object(String key, Loggable val);
   void string(String key, String val);
-  T build();
+
+  T finalize();
 }

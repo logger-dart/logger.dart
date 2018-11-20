@@ -12,7 +12,7 @@ Future<void> main() async {
         ..string("username", "vanesyan")
         ..string("type", "image/png")
         ..string("image", "avatar.png"))
-      .build();
+      .finalize();
 
   final tracer = context.trace("uploading!");
   await Future<void>.delayed(const Duration(seconds: 1));
